@@ -1,0 +1,16 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #141518;
+    min-height: 100vh;
+  }
+.card {
+  background:#222832;
+  width: 24rem;
+  min-height: 24rem;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+  

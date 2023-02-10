@@ -9,7 +9,14 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        interactiveRating: {
+          bg: "#222832",
+          cardBg: "#222832",
+        },
+      },
+    },
   },
   plugins: [],
 };
