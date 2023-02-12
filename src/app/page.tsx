@@ -1,11 +1,11 @@
-import { Project, projects } from "@/utils/projects";
+import { Project, projectColor, projects } from "@/utils/projects";
 import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <main className={styles.main}>
-      <div className="overflow-hidden bg-white shadow sm:rounded-md">
+      <div className="bg-white shadow sm:rounded-md">
         <ul role="list" className="divide-y divide-gray-200">
           {projects.map((project: Project) => (
             <li key={project.name}>
@@ -16,23 +16,27 @@ export default function Home() {
                       {project.name}
                     </p>
                     <div className="ml-2 flex flex-shrink-0">
-                      <p className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
+                      <p
+                        className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${projectColor(
+                          project.difficulty
+                        ).toString()}`}
+                      >
                         {project.difficulty}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-2 sm:flex sm:justify-between flex-col">
+                  <div className="mt-2 flex-col sm:flex sm:justify-between">
                     <div className="sm:flex">
                       {project.tags.map((tag) => (
                         <p
                           key={tag}
-                          className="p-2 flex items-center text-sm text-gray-500"
+                          className="flex items-center p-2 text-sm text-gray-500"
                         >
                           {tag}
                         </p>
                       ))}
                     </div>
-                    <div className="pt-8 flex items-center justify-center text-center text-sm text-gray-500 sm:mt-0">
+                    <div className="flex items-center justify-center pt-8 text-center text-sm text-gray-500 sm:mt-0">
                       <svg
                         className="mr-1.5 h-5 w-5 flex-shrink-0 text-gray-400"
                         xmlns="http://www.w3.org/2000/svg"
