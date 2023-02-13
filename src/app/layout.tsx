@@ -1,9 +1,10 @@
-import './globals.css'
-
+import { CurrentSelectedContextProvider } from "@/utils/context/CurrentSelectedContext";
+import { LockedNamesContextProvider } from "@/utils/context/LockedNamedContext";
+import "./globals.css";
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -12,7 +13,13 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body className="h-fit w-fit bg-black">
+        {
+          <CurrentSelectedContextProvider>
+            <LockedNamesContextProvider>{children}</LockedNamesContextProvider>
+          </CurrentSelectedContextProvider>
+        }
+      </body>
     </html>
-  )
+  );
 }

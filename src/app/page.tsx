@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="bg-darkslateblue flex h-screen min-h-screen flex-col items-center justify-center p-12">
+    <main className="bg-darkslateblue flex h-screen w-screen flex-col items-center justify-center overflow-scroll p-12">
       <div className="bg-white shadow sm:rounded-md">
         <ul role="list" className="divide-y divide-gray-200">
           {projects.map((project: Project) => (
