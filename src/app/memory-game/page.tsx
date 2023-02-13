@@ -8,9 +8,6 @@ import { CardComponent } from "./CardComponent";
 import styles from "./memory-game.module.css";
 
 // TODO: Add a timer
-// TODO: Add a score
-// TODO: Add a reset button
-// TODO: Add a "go back" button
 // TODO: Add a add end state screen
 export type Icon = {
   name: string;
