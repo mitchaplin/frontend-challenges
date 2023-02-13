@@ -1,10 +1,9 @@
 import { Project, projectColor, projects } from "@/utils/projects";
 import Link from "next/link";
-import styles from "./page.module.css";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main className="bg-darkslateblue flex h-screen min-h-screen flex-col items-center justify-center p-12">
       <div className="bg-white shadow sm:rounded-md">
         <ul role="list" className="divide-y divide-gray-200">
           {projects.map((project: Project) => (
