@@ -2,7 +2,7 @@
 import { useCurrentSelectedContext } from "@/utils/context/CurrentSelectedContext";
 import { useLockedNamesContext } from "@/utils/context/LockedNamedContext";
 import { iconArr } from "@/utils/imports";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { CardComponent } from "./CardComponent";
 import styles from "./memory-game.module.css";
@@ -61,6 +61,7 @@ export default function InteractiveRating() {
   const [gameSize, setGameSize] = useState<number>(0);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [boardData, setBoardData] = useState<BoardData>();
+  const router = useRouter();
   const handleSubmit = (e: SyntheticEvent) => {
     if (gameSize === 0) {
       alert("Please select a game size");
@@ -81,19 +82,45 @@ export default function InteractiveRating() {
   return (
     <main className={styles.main}>
       <div className="absolute z-[0] flex w-screen flex-row justify-between gap-4 p-4">
-        <Link
-          href={"/"}
-          onClick={() => {
-            setLockedNames([]);
-            setCurrentSelected({ name: "", index: -1, hide: false, score: 0 });
-          }}
-          className="my-2 h-fit rounded-lg bg-gray-700 p-2  text-white"
-        >
-          Go Back
-        </Link>
-        <h1 className="my-2 rounded-lg p-2 text-3xl text-white">
-          Total Guesses:&nbsp;{currentSelected.score}
-        </h1>
+        <div className="gap-4">
+          {submitted && (
+            <button
+              onClick={() => {
+                setSubmitted(false);
+                setLockedNames([]);
+                setCurrentSelected({
+                  name: "",
+                  index: -1,
+                  hide: false,
+                  score: 0,
+                });
+              }}
+              className="m-2 h-fit rounded-lg bg-gray-700 p-2 text-white"
+            >
+              Reset
+            </button>
+          )}
+          <button
+            onClick={() => {
+              router.push("/");
+              setLockedNames([]);
+              setCurrentSelected({
+                name: "",
+                index: -1,
+                hide: false,
+                score: 0,
+              });
+            }}
+            className="my-2 h-fit rounded-lg bg-gray-700 p-2 text-white"
+          >
+            Go Back
+          </button>
+        </div>
+        {submitted && (
+          <h1 className="my-2 rounded-lg p-2 text-3xl text-white">
+            Total Guesses:&nbsp;{currentSelected.score}
+          </h1>
+        )}
       </div>
       {!submitted ? (
         <div className="z-10 m-auto flex h-60 w-[24rem] flex-col gap-4">
