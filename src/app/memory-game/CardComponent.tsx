@@ -21,6 +21,7 @@ export const CardComponent = ({
       index: currentSelected.index,
       hide: false,
       score: currentSelected.score,
+      locked: false,
     });
 
     if (
@@ -34,21 +35,22 @@ export const CardComponent = ({
         index: -1,
         hide: true,
         score: currentSelected.score + 1,
+        locked: false,
       });
       setIsFlipped(!isFlipped);
       return;
     } else {
       if (currentSelected.name.length > 0 && currentSelected.name !== name) {
-        console.log(currentSelected);
         setIsFlipped(true);
+        setCurrentSelected({ ...currentSelected, locked: true });
         setTimeout(() => {
           setCurrentSelected({
             name: "",
             index: -1,
             hide: true,
             score: currentSelected.score + 1,
+            locked: false,
           });
-          setIsFlipped(!currentSelected.hide ? false : !isFlipped);
         }, 1000);
       } else {
         setCurrentSelected({
@@ -56,8 +58,9 @@ export const CardComponent = ({
           index: index,
           hide: false,
           score: currentSelected.score,
+          locked: false,
         });
-        setIsFlipped(!isFlipped);
+        setIsFlipped(true);
       }
     }
   };
@@ -74,6 +77,7 @@ export const CardComponent = ({
     >
       <button
         onClick={(e) => handleFlip(e, name)}
+        disabled={currentSelected.locked || isFlipped}
         className="rounded-lg border-gray-700 bg-gray-800 p-4 shadow"
       >
         <div className="rounded-lg border-gray-700 bg-gray-800 p-4 text-gray-800">
@@ -82,6 +86,7 @@ export const CardComponent = ({
       </button>
       <button
         onClick={(e) => handleFlip(e, name)}
+        disabled={currentSelected.locked || isFlipped}
         className={`rounded-lg bg-white p-4 shadow ${
           lockedNames.includes(name)
             ? "cursor-default bg-gray-500"

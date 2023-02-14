@@ -13,6 +13,7 @@ type CurrentSelected = {
   index: number;
   hide: boolean;
   score: number;
+  locked: boolean;
 };
 
 interface ContextProps {
@@ -21,12 +22,19 @@ interface ContextProps {
     index: number;
     hide: boolean;
     score: number;
+    locked: boolean;
   };
   setCurrentSelected: Dispatch<SetStateAction<CurrentSelected>>;
 }
 
 const CurrentSelectedContext = createContext<ContextProps>({
-  currentSelected: { name: "", index: -1, hide: false, score: 0 },
+  currentSelected: {
+    name: "",
+    index: -1,
+    hide: false,
+    score: 0,
+    locked: false,
+  },
   setCurrentSelected: () => {},
 });
 
@@ -36,6 +44,7 @@ export const CurrentSelectedContextProvider = ({ children }: any) => {
     index: 0,
     hide: false,
     score: 0,
+    locked: false,
   });
 
   return (
