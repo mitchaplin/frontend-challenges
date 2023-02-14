@@ -52,7 +52,7 @@ const getBoardData = (gameSize: number): BoardData => {
   }
 };
 
-export default function InteractiveRating() {
+export default function MemoryGame() {
   const { currentSelected, setCurrentSelected } = useCurrentSelectedContext();
   const { lockedNames, setLockedNames } = useLockedNamesContext();
   const [gameSize, setGameSize] = useState<number>(0);
