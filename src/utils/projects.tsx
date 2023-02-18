@@ -25,7 +25,7 @@ export const projects: Project[] = [
     name: "Checkout Line",
     difficulty: "Intermediate",
     tags: ["React", "Tailwind", "TypeScript", "Next"],
-    completed: "Feb 11, 2023",
+    completed: "Feb 18, 2023",
     link: "./checkout-line",
   },
 ];

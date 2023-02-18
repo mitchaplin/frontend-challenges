@@ -70,6 +70,7 @@ export const CardComponent = ({
       setIsFlipped(false);
     }
   }, [currentSelected, setCurrentSelected]);
+
   return (
     <ReactCardFlip
       flipDirection="horizontal"
@@ -78,7 +79,7 @@ export const CardComponent = ({
       <button
         onClick={(e) => handleFlip(e, name)}
         disabled={currentSelected.locked || isFlipped}
-        className="rounded-lg border-gray-700 bg-gray-800 p-4 shadow"
+        className="rounded-lg border-gray-700 bg-gray-800 p-4 shadow-md"
       >
         <div className="rounded-lg border-gray-700 bg-gray-800 p-4 text-gray-800">
           <QuestionMarkCircleIcon className="h-10 w-10 text-gray-800" />
@@ -87,7 +88,7 @@ export const CardComponent = ({
       <button
         onClick={(e) => handleFlip(e, name)}
         disabled={currentSelected.locked || isFlipped}
-        className={`rounded-lg bg-white p-4 shadow ${
+        className={`rounded-lg p-4 shadow ${
           lockedNames.includes(name)
             ? "cursor-default bg-gray-500"
             : "bg-gray-800"
