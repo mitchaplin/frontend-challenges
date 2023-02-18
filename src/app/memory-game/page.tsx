@@ -78,26 +78,8 @@ export default function MemoryGame() {
 
   return (
     <main className={styles.main}>
-      <div className="absolute z-[0] flex w-screen flex-row justify-between gap-4 p-4">
+      <div className="relative z-[0] flex w-screen flex-row justify-between gap-4 p-4 xl:absolute">
         <div className="gap-4">
-          {submitted && (
-            <button
-              onClick={() => {
-                setSubmitted(false);
-                setLockedNames([]);
-                setCurrentSelected({
-                  name: "",
-                  index: -1,
-                  hide: false,
-                  score: 0,
-                  locked: false,
-                });
-              }}
-              className="m-2 h-fit rounded-lg bg-gray-700 p-2 text-white"
-            >
-              Reset
-            </button>
-          )}
           <button
             onClick={() => {
               router.push("/");
@@ -110,15 +92,35 @@ export default function MemoryGame() {
                 locked: false,
               });
             }}
-            className="my-2 h-fit rounded-lg bg-gray-700 p-2 text-white"
+            className="my-12 h-fit rounded-lg bg-gray-700 p-2 text-white"
           >
             Go Back
           </button>
         </div>
         {submitted && (
-          <h1 className="my-2 rounded-lg p-2 text-3xl text-white">
-            Total Guesses:&nbsp;{currentSelected.score}
-          </h1>
+          <div className="flex flex-col">
+            <h1 className="my-2 rounded-lg p-2 text-3xl text-white">
+              Total Guesses:&nbsp;{currentSelected.score}
+            </h1>
+            {submitted && (
+              <button
+                onClick={() => {
+                  setSubmitted(false);
+                  setLockedNames([]);
+                  setCurrentSelected({
+                    name: "",
+                    index: -1,
+                    hide: false,
+                    score: 0,
+                    locked: false,
+                  });
+                }}
+                className="m-2 h-fit rounded-lg bg-gray-700 p-2 text-white"
+              >
+                Reset
+              </button>
+            )}
+          </div>
         )}
       </div>
       {!submitted ? (

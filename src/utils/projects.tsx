@@ -1,12 +1,12 @@
 export type Project = {
   name: string;
-  difficulty: string;
+  difficulty: "Newbie" | "Intermediate" | "Advanced";
   tags: string[];
   completed: string;
   link: string;
 };
 
-export const projects = [
+export const projects: Project[] = [
   {
     name: "Interactive Rating",
     difficulty: "Newbie",
@@ -20,6 +20,13 @@ export const projects = [
     tags: ["React", "Tailwind", "TypeScript", "Next"],
     completed: "Feb 11, 2023",
     link: "./memory-game",
+  },
+  {
+    name: "Checkout Line",
+    difficulty: "Intermediate",
+    tags: ["React", "Tailwind", "TypeScript", "Next"],
+    completed: "Feb 11, 2023",
+    link: "./checkout-line",
   },
 ];
 

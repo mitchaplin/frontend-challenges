@@ -1,10 +1,12 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./interactive-rating.module.css";
 export default function InteractiveRating() {
   const [rating, setRating] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const router = useRouter();
   return (
     <main className={styles.main}>
       <div className={styles.card}>
@@ -63,11 +65,19 @@ export default function InteractiveRating() {
             <h1 className="mt-8 text-center text-3xl text-white">Thank you!</h1>
             <p className="mt-4 text-center text-gray-400">
               We appreciate you taking the time to give a rating. If you ever
-              need more support, don’t hesitate to get in touch!
+              need more support, don&apos;t hesitate to get in touch!
             </p>
           </div>
         )}
       </div>
+      <button
+        onClick={() => {
+          router.push("/");
+        }}
+        className="mt-36 rounded-lg bg-gray-700 p-2 text-white"
+      >
+        Go Back
+      </button>
     </main>
   );
 }
