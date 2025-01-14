@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 
-
 export type CheckoutLine = {
   number: number;
-  cashier: Cashier
+  cashier: Cashier;
   customers: Customer[];
 };
 
@@ -58,7 +57,7 @@ const generateRandomCustomerName = () => {
     "Jamie",
   ];
   return names[Math.floor(Math.random() * names.length)];
-}
+};
 const generateCustomer = () => {
   const random = Math.random();
   if (random > 0.5) {
@@ -73,7 +72,10 @@ const generateCustomer = () => {
 
 // Finds the shortest line and adds the customer to that line
 // Returns the checkout line array
-const queueIntoShortestLine = (checkoutLines: CheckoutLine[], customer: Customer) => {
+const queueIntoShortestLine = (
+  checkoutLines: CheckoutLine[],
+  customer: Customer
+) => {
   const lane1 = checkoutLines.find(({ cashier }) => cashier.lane === 1);
   const lane2 = checkoutLines.find(({ cashier }) => cashier.lane === 2);
   const lane3 = checkoutLines.find(({ cashier }) => cashier.lane === 3);
@@ -81,20 +83,29 @@ const queueIntoShortestLine = (checkoutLines: CheckoutLine[], customer: Customer
   const lane2Length = lane2?.customers?.length || 0;
   const lane3Length = lane3?.customers?.length || 0;
   if (lane1Length <= lane2Length && lane1Length <= lane3Length) {
-    if (lane1?.cashier.status === "idle" || lane1?.cashier.status === "working") {
+    if (
+      lane1?.cashier.status === "idle" ||
+      lane1?.cashier.status === "working"
+    ) {
       lane1?.customers?.push(customer);
     }
   } else if (lane2Length <= lane1Length && lane2Length <= lane3Length) {
-    if (lane2?.cashier.status === "idle" || lane2?.cashier.status === "working") {
+    if (
+      lane2?.cashier.status === "idle" ||
+      lane2?.cashier.status === "working"
+    ) {
       lane2?.customers?.push(customer);
     }
   } else if (lane3Length <= lane1Length && lane3Length <= lane2Length) {
-    if (lane3?.cashier.status === "idle" || lane3?.cashier.status === "working") {
+    if (
+      lane3?.cashier.status === "idle" ||
+      lane3?.cashier.status === "working"
+    ) {
       lane3?.customers?.push(customer);
     }
   }
   return checkoutLines;
-}
+};
 
 export default function CheckoutLine() {
   const [checkoutLines, setCheckoutLines] = useState<CheckoutLine[]>([
@@ -127,39 +138,44 @@ export default function CheckoutLine() {
     },
   ]);
 
-
   useEffect(() => {
     const interval = setInterval(() => {
       // Add a new customer to the queue
       const potentialCustomer = generateCustomer();
       if (potentialCustomer) {
-        setCheckoutLines(queueIntoShortestLine(checkoutLines, potentialCustomer));
+        setCheckoutLines(
+          queueIntoShortestLine(checkoutLines, potentialCustomer)
+        );
       }
       // Update the status of the checkout lines
-      const updatedCheckoutLine = checkoutLines.map((checkoutLine: CheckoutLine) => {
-        let line = checkoutLine;
-        const cashier = line.cashier;
-        let customers = line.customers; 
-        if (customers.length > 0) {
-          if (cashier.status === "idle") {
-            cashier.status = "working";
-          }
-          if (customers[0].status === "waiting") {
-            customers[0].status = "checkout";
-          } else if (customers[0].status === "checkout") {
-            if (customers[0].items > 0) {
-            customers[0].items -= 1;
-            } else {
-            // pop customer from the queue
-            console.log(`${customers[0].name} has been checked out`);
-            line.customers = customers.slice(1)
+      const updatedCheckoutLine = checkoutLines.map(
+        (checkoutLine: CheckoutLine) => {
+          let line = checkoutLine;
+          const cashier = line.cashier;
+          let customers = line.customers;
+          if (customers.length > 0) {
+            if (cashier.status === "idle") {
+              cashier.status = "working";
             }
+            if (customers[0].status === "waiting") {
+              // this will wait a "tick" before changing the status to checkout
+              // this is to simulate the time it takes for the customer to move to the checkout
+              customers[0].status = "checkout";
+            } else if (customers[0].status === "checkout") {
+              if (customers[0].items > 0) {
+                customers[0].items -= 1;
+              } else {
+                // pop customer from the queue
+                console.log(`${customers[0].name} has been checked out`);
+                line.customers = customers.slice(1);
+              }
+            }
+          } else {
+            cashier.status = "idle";
           }
-        } else {
-          cashier.status = "idle";
+          return line;
         }
-        return line;
-      });
+      );
       setCheckoutLines(updatedCheckoutLine);
     }, 1000);
     return () => clearInterval(interval);
@@ -189,12 +205,11 @@ export default function CheckoutLine() {
                     key={index}
                     className={`h-24 w-24 rounded-full bg-blue-300`}
                   >
-                      <h3>{customer.name}</h3>
-                      <h4>{customer.items}</h4>
-                    <h5 key={customer.status}>
-                    </h5>
+                    <h3>{customer.name}</h3>
+                    <h4>{customer.items}</h4>
+                    <h5>{customer.status}</h5>
                   </button>
-                )
+                );
               })}
             </div>
           );
