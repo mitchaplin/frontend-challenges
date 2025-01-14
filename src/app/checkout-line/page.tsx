@@ -10,6 +10,11 @@ export type CheckoutLine = {
 export type Cashier = {
   name: string;
   status: "idle" | "working" | "on break";
+  breakCounter: number;
+  breaksTaken: number;
+  breakTime: number;
+  customersServed: number;
+  itemsScanned: number;
   lane: number;
 };
 
@@ -60,7 +65,7 @@ const generateRandomCustomerName = () => {
 };
 const generateCustomer = () => {
   const random = Math.random();
-  if (random > 0.5) {
+  if (random > 0.7) {
     return {
       name: generateRandomCustomerName(),
       items: Math.ceil(Math.random() * 10),
@@ -83,26 +88,11 @@ const queueIntoShortestLine = (
   const lane2Length = lane2?.customers?.length || 0;
   const lane3Length = lane3?.customers?.length || 0;
   if (lane1Length <= lane2Length && lane1Length <= lane3Length) {
-    if (
-      lane1?.cashier.status === "idle" ||
-      lane1?.cashier.status === "working"
-    ) {
-      lane1?.customers?.push(customer);
-    }
+    lane1?.customers?.push(customer);
   } else if (lane2Length <= lane1Length && lane2Length <= lane3Length) {
-    if (
-      lane2?.cashier.status === "idle" ||
-      lane2?.cashier.status === "working"
-    ) {
-      lane2?.customers?.push(customer);
-    }
+    lane2?.customers?.push(customer);
   } else if (lane3Length <= lane1Length && lane3Length <= lane2Length) {
-    if (
-      lane3?.cashier.status === "idle" ||
-      lane3?.cashier.status === "working"
-    ) {
-      lane3?.customers?.push(customer);
-    }
+    lane3?.customers?.push(customer);
   }
   return checkoutLines;
 };
@@ -115,15 +105,25 @@ export default function CheckoutLine() {
         name: "John",
         status: "working",
         lane: 1,
+        customersServed: 0,
+        itemsScanned: 0,
+        breakCounter: 0,
+        breaksTaken: 0,
+        breakTime: 0,
       },
       customers: [],
     },
     {
       number: 2,
       cashier: {
-        name: "Jafar",
+        name: "Jordy",
         status: "working",
         lane: 2,
+        customersServed: 0,
+        itemsScanned: 0,
+        breakCounter: 0,
+        breaksTaken: 0,
+        breakTime: 0,
       },
       customers: [],
     },
@@ -133,6 +133,11 @@ export default function CheckoutLine() {
         name: "Jerry",
         status: "working",
         lane: 3,
+        customersServed: 0,
+        itemsScanned: 0,
+        breakCounter: 0,
+        breaksTaken: 0,
+        breakTime: 0,
       },
       customers: [],
     },
@@ -153,6 +158,23 @@ export default function CheckoutLine() {
           let line = checkoutLine;
           const cashier = line.cashier;
           let customers = line.customers;
+          if (cashier.status === "on break") {
+            if (cashier.breakCounter === 0) {
+              cashier.status = "idle";
+              return line;
+            }
+            cashier.breakTime += 1;
+            cashier.breakCounter -= 1;
+            return line;
+          }
+          if (cashier.status === "idle") {
+            if (Math.random() > 0.8) {
+              cashier.status = "on break";
+              cashier.breakCounter = Math.ceil(Math.random() * 10);
+              cashier.breaksTaken += 1;
+              return line;
+            }
+          }
           if (customers.length > 0) {
             if (cashier.status === "idle") {
               cashier.status = "working";
@@ -187,10 +209,14 @@ export default function CheckoutLine() {
       <div className="flex items-start justify-center gap-4 transition-all">
         {checkoutLines.map((cl) => {
           return (
-            <div key={cl.number} className="grid grid-cols-1 gap-4">
+            <div
+              key={cl.number}
+              className="grid grid-cols-1 justify-items-center gap-4"
+            >
               <button
+                data-tooltip-target={cl.number}
                 key={cl.number}
-                className={`h-24 w-24 rounded-full ${getWorkingCondition(
+                className={`h-24 w-72 rounded-full ${getWorkingCondition(
                   cl.cashier.status
                 )}`}
               >
@@ -203,7 +229,7 @@ export default function CheckoutLine() {
                 return (
                   <button
                     key={index}
-                    className={`h-24 w-24 rounded-full bg-blue-300`}
+                    className={`h-24 w-24 justify-items-center rounded-full bg-blue-300`}
                   >
                     <h3>{customer.name}</h3>
                     <h4>{customer.items}</h4>

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { CardComponent } from "./CardComponent";
 import styles from "./memory-game.module.css";
+import Link from "next/link";
 
 // TODO: Add a timer
 // TODO: Add a add end state screen
@@ -58,7 +59,6 @@ export default function MemoryGame() {
   const [gameSize, setGameSize] = useState<number>(0);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [boardData, setBoardData] = useState<BoardData>();
-  const router = useRouter();
   const handleSubmit = (e: SyntheticEvent) => {
     if (gameSize === 0) {
       alert("Please select a game size");
@@ -82,7 +82,7 @@ export default function MemoryGame() {
         <div className="gap-4">
           <button
             onClick={() => {
-              router.push("/");
+              <Link href="/">Dashboard</Link>;
               setLockedNames([]);
               setCurrentSelected({
                 name: "",
