@@ -61,7 +61,7 @@ const generateRandomCustomerName = () => {
 }
 const generateCustomer = () => {
   const random = Math.random();
-  if (random > 0.8) {
+  if (random > 0.5) {
     return {
       name: generateRandomCustomerName(),
       items: Math.ceil(Math.random() * 10),
@@ -72,7 +72,7 @@ const generateCustomer = () => {
 };
 
 // Finds the shortest line and adds the customer to that line
-// Returns the checkoutline array
+// Returns the checkout line array
 const queueIntoShortestLine = (checkoutLines: CheckoutLine[], customer: Customer) => {
   const lane1 = checkoutLines.find(({ cashier }) => cashier.lane === 1);
   const lane2 = checkoutLines.find(({ cashier }) => cashier.lane === 2);
@@ -95,6 +95,7 @@ const queueIntoShortestLine = (checkoutLines: CheckoutLine[], customer: Customer
   }
   return checkoutLines;
 }
+
 export default function CheckoutLine() {
   const [checkoutLines, setCheckoutLines] = useState<CheckoutLine[]>([
     {
@@ -111,7 +112,7 @@ export default function CheckoutLine() {
       cashier: {
         name: "Jafar",
         status: "working",
-        lane: 1,
+        lane: 2,
       },
       customers: [],
     },
@@ -120,7 +121,7 @@ export default function CheckoutLine() {
       cashier: {
         name: "Jerry",
         status: "working",
-        lane: 1,
+        lane: 3,
       },
       customers: [],
     },
@@ -130,15 +131,15 @@ export default function CheckoutLine() {
   useEffect(() => {
     const interval = setInterval(() => {
       // Add a new customer to the queue
-      let potentialCustomer = generateCustomer();
+      const potentialCustomer = generateCustomer();
       if (potentialCustomer) {
         setCheckoutLines(queueIntoShortestLine(checkoutLines, potentialCustomer));
       }
-
-      // Update the status of the cashiers
-      const updatedCheckoutLines = checkoutLines.map((checkoutLine) => {
-        const cashier = checkoutLine.cashier;
-        const customers = checkoutLine.customers;
+      // Update the status of the checkout lines
+      const updatedCheckoutLine = checkoutLines.map((checkoutLine: CheckoutLine) => {
+        let line = checkoutLine;
+        const cashier = line.cashier;
+        let customers = line.customers; 
         if (customers.length > 0) {
           if (cashier.status === "idle") {
             cashier.status = "working";
@@ -146,54 +147,54 @@ export default function CheckoutLine() {
           if (customers[0].status === "waiting") {
             customers[0].status = "checkout";
           } else if (customers[0].status === "checkout") {
-            customers.shift();
+            if (customers[0].items > 0) {
+            customers[0].items -= 1;
+            } else {
+            // pop customer from the queue
+            console.log(`${customers[0].name} has been checked out`);
+            line.customers = customers.slice(1)
+            }
           }
         } else {
           cashier.status = "idle";
         }
-        return { ...checkoutLine, cashier, customers };
+        return line;
       });
-
+      setCheckoutLines(updatedCheckoutLine);
     }, 1000);
     return () => clearInterval(interval);
-  }, [customers]);
+  }, [checkoutLines]);
 
   return (
     <main className="h-screen w-screen overflow-x-auto bg-black p-12 text-white">
       <h1 className="mb-8 text-center text-4xl">Checkout Line</h1>
       <div className="flex items-start justify-center gap-4 transition-all">
-        {cashiers.map((cashier) => {
+        {checkoutLines.map((cl) => {
           return (
-            <div key={cashier.number} className="grid grid-cols-1 gap-4">
+            <div key={cl.number} className="grid grid-cols-1 gap-4">
               <button
-                key={cashier.number}
+                key={cl.number}
                 className={`h-24 w-24 rounded-full ${getWorkingCondition(
-                  cashier.status
+                  cl.cashier.status
                 )}`}
               >
-                <div key={cashier.number}>
-                  <h3>{cashier.name}</h3>
-                  {customers.some((cust) => cust.lane === cashier.lane) ? (
-                    <h4>{cashier.status}</h4>
-                  ) : (
-                    <h4>{"idle"}</h4>
-                  )}
+                <div key={cl.number}>
+                  <h3>{cl.cashier.name}</h3>
+                  <h4>{cl.cashier.status}</h4>
                 </div>
               </button>
-              {customers.map((customer) => {
-                return customer.lane === cashier.lane ? (
+              {cl.customers.map((customer: Customer, index: number) => {
+                return (
                   <button
-                    key={customer.number}
+                    key={index}
                     className={`h-24 w-24 rounded-full bg-blue-300`}
                   >
-                    <div key={customer.number}>
                       <h3>{customer.name}</h3>
                       <h4>{customer.items}</h4>
-                    </div>
+                    <h5 key={customer.status}>
+                    </h5>
                   </button>
-                ) : (
-                  <></>
-                );
+                )
               })}
             </div>
           );
