@@ -135,6 +135,24 @@ export default function CheckoutLine() {
         setCheckoutLines(queueIntoShortestLine(checkoutLines, potentialCustomer));
       }
 
+      // Update the status of the cashiers
+      const updatedCheckoutLines = checkoutLines.map((checkoutLine) => {
+        const cashier = checkoutLine.cashier;
+        const customers = checkoutLine.customers;
+        if (customers.length > 0) {
+          if (cashier.status === "idle") {
+            cashier.status = "working";
+          }
+          if (customers[0].status === "waiting") {
+            customers[0].status = "checkout";
+          } else if (customers[0].status === "checkout") {
+            customers.shift();
+          }
+        } else {
+          cashier.status = "idle";
+        }
+        return { ...checkoutLine, cashier, customers };
+      });
 
     }, 1000);
     return () => clearInterval(interval);
