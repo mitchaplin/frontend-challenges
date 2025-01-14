@@ -1,19 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export type Cashier = {
+
+export type CheckoutLine = {
   number: number;
+  cashier: Cashier
+  customers: Customer[];
+};
+
+export type Cashier = {
   name: string;
   status: "idle" | "working" | "on break";
-  lane: 1 | 2 | 3 | -1;
+  lane: number;
 };
 
 export type Customer = {
-  number: number;
   name: string;
   items: number;
   status: "waiting" | "checkout";
-  lane: number;
 };
 
 const getWorkingCondition = (status: Cashier["status"]) => {
@@ -27,98 +31,111 @@ const getWorkingCondition = (status: Cashier["status"]) => {
   }
 };
 
-const generateOptionalCustomer = (customers: Customer[]) => {
+const generateRandomCustomerName = () => {
+  const names = [
+    "Jane",
+    "Jill",
+    "Jack",
+    "Jenny",
+    "Josh",
+    "Jen",
+    "Jill",
+    "James",
+    "Jasmine",
+    "Jared",
+    "Jade",
+    "Jasper",
+    "Jax",
+    "Jaxson",
+    "Jaden",
+    "Jagger",
+    "Jaiden",
+    "Jairo",
+    "Jamar",
+    "Jamari",
+    "Jamal",
+    "Jameson",
+    "Jamie",
+  ];
+  return names[Math.floor(Math.random() * names.length)];
+}
+const generateCustomer = () => {
   const random = Math.random();
-  let lane1 = customers.reduce(
-    (acc, customer) => (customer.lane === 1 ? acc++ : acc),
-    0
-  );
-  let lane2 = customers.reduce(
-    (acc, customer) => (customer.lane === 2 ? acc++ : acc),
-    0
-  );
-  let lane3 = customers.reduce(
-    (acc, customer) => (customer.lane === 3 ? acc++ : acc),
-    0
-  );
-  console.log(lane1, lane2, lane3);
-  let min;
-  if (lane1 < lane2 && lane1 < lane3) {
-    min = 1;
-  } else if (lane2 < lane1 && lane2 < lane3) {
-    min = 2;
-  } else {
-    min = 3;
-  }
-  console.log(min);
-  if (random > 0.5) {
-    const newCustomer: Customer = {
-      number: customers.length + 1,
-      name: `Jill ${customers.length + 1}`,
-      items: Math.ceil(Math.random() * 8) + 1,
+  if (random > 0.8) {
+    return {
+      name: generateRandomCustomerName(),
+      items: Math.ceil(Math.random() * 10),
       status: "waiting",
-      lane: min,
-    };
-    return [...customers, newCustomer];
+    } as Customer;
   }
-  return null;
+  return;
 };
 
+// Finds the shortest line and adds the customer to that line
+// Returns the checkoutline array
+const queueIntoShortestLine = (checkoutLines: CheckoutLine[], customer: Customer) => {
+  const lane1 = checkoutLines.find(({ cashier }) => cashier.lane === 1);
+  const lane2 = checkoutLines.find(({ cashier }) => cashier.lane === 2);
+  const lane3 = checkoutLines.find(({ cashier }) => cashier.lane === 3);
+  const lane1Length = lane1?.customers?.length || 0;
+  const lane2Length = lane2?.customers?.length || 0;
+  const lane3Length = lane3?.customers?.length || 0;
+  if (lane1Length <= lane2Length && lane1Length <= lane3Length) {
+    if (lane1?.cashier.status === "idle" || lane1?.cashier.status === "working") {
+      lane1?.customers?.push(customer);
+    }
+  } else if (lane2Length <= lane1Length && lane2Length <= lane3Length) {
+    if (lane2?.cashier.status === "idle" || lane2?.cashier.status === "working") {
+      lane2?.customers?.push(customer);
+    }
+  } else if (lane3Length <= lane1Length && lane3Length <= lane2Length) {
+    if (lane3?.cashier.status === "idle" || lane3?.cashier.status === "working") {
+      lane3?.customers?.push(customer);
+    }
+  }
+  return checkoutLines;
+}
 export default function CheckoutLine() {
-  const [cashiers, setCashiers] = useState<Cashier[]>([
+  const [checkoutLines, setCheckoutLines] = useState<CheckoutLine[]>([
     {
       number: 1,
-      name: "John",
-      status: "working",
-      lane: 1,
+      cashier: {
+        name: "John",
+        status: "working",
+        lane: 1,
+      },
+      customers: [],
     },
     {
       number: 2,
-      name: "Joe",
-      status: "working",
-      lane: 2,
+      cashier: {
+        name: "Jafar",
+        status: "working",
+        lane: 1,
+      },
+      customers: [],
     },
     {
       number: 3,
-      name: "Jim",
-      status: "working",
-      lane: 3,
+      cashier: {
+        name: "Jerry",
+        status: "working",
+        lane: 1,
+      },
+      customers: [],
     },
   ]);
-  const [customers, setCustomers] = useState<Customer[]>([
-    {
-      number: 1,
-      name: "Jill",
-      items: 3,
-      status: "waiting",
-      lane: 1,
-    },
-  ]);
-  // check if items = 0, if so, remove customer from line
-  // else if person is checking out, remove items by line
+
+
   useEffect(() => {
     const interval = setInterval(() => {
-      let c = generateOptionalCustomer(customers);
-      c && setCustomers(c);
-      if (
-        customers &&
-        customers.length > 0 &&
-        (customers[0].items <= 0 ||
-          customers[1].items <= 0 ||
-          customers[2].items <= 0)
-      ) {
-        if (customers[0].items === 0) customers.splice(0, 1);
-        if (customers[1].items === 0) customers.splice(1, 1);
-        if (customers[2].items === 0) customers.splice(2, 1);
-        setCustomers(customers);
-        return;
-      } else {
-        // remove items from three customers in front on lines
-        customers.find((customer) => customer.lane === 1 && customer)!
-          .items-- || null;
-        customers.find((customer) => customer.lane === 2)!.items-- || null;
-        customers.find((customer) => customer.lane === 3)!.items-- || null;
+      // Add a new customer to the queue
+      let potentialCustomer = generateCustomer();
+      if (potentialCustomer) {
+        setCheckoutLines(queueIntoShortestLine(checkoutLines, potentialCustomer));
       }
+
+
     }, 1000);
     return () => clearInterval(interval);
   }, [customers]);
