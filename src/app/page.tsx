@@ -6,7 +6,10 @@ export default function Home() {
     <main className="flex h-screen w-screen flex-col overflow-scroll bg-slate-900 p-12">
       <div className="grid grid-cols-2 gap-4 shadow">
         {projects.map((project: Project) => (
-          <div key={project.name} className="rounded-md bg-slate-100">
+          <div
+            key={project.name}
+            className="rounded-md bg-slate-100 transition-all duration-200 hover:-translate-y-1"
+          >
             <Link href={project.link}>
               <div className="px-4 py-4 sm:px-6">
                 <div className="flex items-center justify-between">
