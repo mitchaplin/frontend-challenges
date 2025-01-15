@@ -8,7 +8,7 @@ export default function Home() {
         {projects.map((project: Project) => (
           <div
             key={project.name}
-            className="rounded-md bg-slate-100 transition-all duration-200 hover:-translate-y-1"
+            className="rounded-md bg-slate-100 transition-all duration-200 hover:-translate-y-1 hover:bg-gray-300"
           >
             <Link href={project.link}>
               <div className="px-4 py-4 sm:px-6">
