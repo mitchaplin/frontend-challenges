@@ -1,5 +1,7 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ShoppingCartIcon } from "@heroicons/react/24/solid";
 
 export type CheckoutLine = {
   number: number;
@@ -27,11 +29,18 @@ export type Customer = {
 const getWorkingCondition = (status: Cashier["status"]) => {
   switch (status) {
     case "idle":
-      return "bg-yellow-500";
-    case "working":
-      return "bg-green-500";
+      return "bg-yellow-100";
     case "on break":
-      return "bg-red-500";
+      return "bg-red-100";
+  }
+};
+
+const translateCustomerStatus = (status: Customer["status"]) => {
+  switch (status) {
+    case "waiting":
+      return "Waiting In Line";
+    case "checkout":
+      return "Checking Out";
   }
 };
 
@@ -98,6 +107,7 @@ const queueIntoShortestLine = (
 };
 
 export default function CheckoutLine() {
+  const router = useRouter();
   const [checkoutLines, setCheckoutLines] = useState<CheckoutLine[]>([
     {
       number: 1,
@@ -186,10 +196,12 @@ export default function CheckoutLine() {
             } else if (customers[0].status === "checkout") {
               if (customers[0].items > 0) {
                 customers[0].items -= 1;
+                cashier.itemsScanned += 1;
               } else {
                 // pop customer from the queue
                 console.log(`${customers[0].name} has been checked out`);
                 line.customers = customers.slice(1);
+                cashier.customersServed += 1;
               }
             }
           } else {
@@ -205,7 +217,17 @@ export default function CheckoutLine() {
 
   return (
     <main className="h-screen w-screen overflow-x-auto bg-black p-12 text-white">
-      <h1 className="mb-8 text-center text-4xl">Checkout Line</h1>
+      <div className="flex flex-col items-center">
+        <h1 className="mb-8 text-center text-4xl">Checkout Line</h1>
+        <button
+          onClick={() => {
+            router.push("/");
+          }}
+          className="mb-8 rounded-lg bg-gray-700 p-2 text-white"
+        >
+          Go Back
+        </button>
+      </div>
       <div className="flex items-start justify-center gap-4 transition-all">
         {checkoutLines.map((cl) => {
           return (
@@ -213,28 +235,61 @@ export default function CheckoutLine() {
               key={cl.number}
               className="grid grid-cols-1 justify-items-center gap-4"
             >
-              <button
-                data-tooltip-target={cl.number}
-                key={cl.number}
-                className={`h-24 w-72 rounded-full ${getWorkingCondition(
-                  cl.cashier.status
-                )}`}
-              >
-                <div key={cl.number}>
-                  <h3>{cl.cashier.name}</h3>
-                  <h4>{cl.cashier.status}</h4>
+              <div className="container mx-24 mt-4">
+                <div className="flex items-center justify-center">
+                  <div className="card m-2 w-96 transform cursor-pointer rounded-lg border border-gray-400 transition-all duration-200 hover:-translate-y-1 hover:border-opacity-0 hover:shadow-md">
+                    <div className="m-3">
+                      <h2 className="mb-2 text-lg">
+                        {cl.cashier.name}
+                        <span
+                          className={`float-right inline animate-pulse rounded-full px-2 align-top font-mono text-sm text-teal-800 ${getWorkingCondition(
+                            cl.cashier.status
+                          )}`}
+                        >
+                          {cl.cashier.status}
+                        </span>
+                      </h2>
+                      <p className="font-mono text-sm font-light text-gray-500 transition-all duration-200 hover:text-gray-700">
+                        Current Break Remainder: {cl.cashier.breakCounter}
+                      </p>
+                      <p className="font-mono text-sm font-light text-gray-500 transition-all duration-200 hover:text-gray-700">
+                        Break Cycles: {cl.cashier.breakTime}
+                      </p>
+                      <p className="font-mono text-sm font-light text-gray-500 transition-all duration-200 hover:text-gray-700">
+                        Breaks Taken: {cl.cashier.breaksTaken}
+                      </p>
+                      <p className="font-mono text-sm font-light text-gray-500 transition-all duration-200 hover:text-gray-700">
+                        Total Customers Served: {cl.cashier.customersServed}
+                      </p>
+                      <p className="font-mono text-sm font-light text-gray-500 transition-all duration-200 hover:text-gray-700">
+                        Total Items Scanned {cl.cashier.itemsScanned}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </button>
+              </div>
+
               {cl.customers.map((customer: Customer, index: number) => {
                 return (
-                  <button
+                  <div
                     key={index}
-                    className={`h-24 w-24 justify-items-center rounded-full bg-blue-300`}
+                    className="shadow-xs mr-2 flex items-center rounded-lg bg-blue-100 p-6"
                   >
-                    <h3>{customer.name}</h3>
-                    <h4>{customer.items}</h4>
-                    <h5>{customer.status}</h5>
-                  </button>
+                    <div className="mr-4 rounded-full bg-blue-300 p-3 text-blue-500">
+                      <ShoppingCartIcon className="h-8 w-8" />
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-gray-700">
+                        {customer.name}
+                      </p>
+                      <p className="mb-2 text-sm font-medium text-gray-600">
+                        Cart Items Remaining: {customer.items}
+                      </p>
+                      <p className="mb-2 text-sm font-medium text-gray-600">
+                        {translateCustomerStatus(customer.status)}
+                      </p>
+                    </div>
+                  </div>
                 );
               })}
             </div>
