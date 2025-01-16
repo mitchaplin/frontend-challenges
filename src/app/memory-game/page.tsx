@@ -1,6 +1,6 @@
 "use client";
 import { useCurrentSelectedContext } from "@/utils/context/CurrentSelectedContext";
-import { useLockedNamesContext } from "@/utils/context/LockedNamedContext";
+import { useLockedNamesContext } from "@/utils/context/LockedNamesContext";
 import { iconArr } from "@/utils/imports";
 import { useRouter } from "next/navigation";
 import { SyntheticEvent, useEffect, useState } from "react";

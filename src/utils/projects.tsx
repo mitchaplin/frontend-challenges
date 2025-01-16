@@ -28,6 +28,13 @@ export const projects: Project[] = [
     completed: "Jan 14, 2025",
     link: "./checkout-line",
   },
+  {
+    name: "Mortgage Calculator",
+    difficulty: "Intermediate",
+    tags: ["React", "Tailwind", "TypeScript", "Next"],
+    completed: "Jan 14, 2025",
+    link: "./mortgage-calculator",
+  },
 ];
 
 export const projectColor = (difficulty: string) => {

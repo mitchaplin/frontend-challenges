@@ -1,5 +1,5 @@
 import { CurrentSelectedContextProvider } from "@/utils/context/CurrentSelectedContext";
-import { LockedNamesContextProvider } from "@/utils/context/LockedNamedContext";
+import { LockedNamesContextProvider } from "@/utils/context/LockedNamesContext";
 import "./globals.css";
 export default function RootLayout({
   children,

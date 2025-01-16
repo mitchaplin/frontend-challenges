@@ -1,5 +1,5 @@
 import { useCurrentSelectedContext } from "@/utils/context/CurrentSelectedContext";
-import { useLockedNamesContext } from "@/utils/context/LockedNamedContext";
+import { useLockedNamesContext } from "@/utils/context/LockedNamesContext";
 
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/solid";
 import { SyntheticEvent, useEffect, useState } from "react";
