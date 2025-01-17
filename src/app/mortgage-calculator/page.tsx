@@ -3,6 +3,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./mortgage-calculator.module.css";
+import {
+  CurrencyDollarIcon,
+  ClockIcon,
+  PercentBadgeIcon,
+} from "@heroicons/react/24/solid";
 export default function MortgageCalculator() {
   const [rating, setRating] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -11,19 +16,24 @@ export default function MortgageCalculator() {
     <main className={styles.main}>
       <form className="w-full max-w-lg bg-slate-100 rounded-md p-4">
         <div className="flex flex-wrap -mx-3 mb-6">
-          <div className="w-full px-3">
+          <div className="w-full px-3 ">
             <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
               htmlFor="mortgage-amount"
             >
               Mortgage Amount
             </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="mortgage-amount"
-              type="number"
-              placeholder="300,000"
-            />
+            <div className="relative flex items-center">
+              <input
+                type="number"
+                placeholder="300000"
+                className="pr-4 pl-14 py-3 text-sm text-black rounded bg-white border border-gray-400 w-full outline-[#333]"
+              />
+
+              <div className="absolute left-4">
+                <CurrencyDollarIcon className="h-6 w-6 text-gray-600" />
+              </div>
+            </div>
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
@@ -32,14 +42,19 @@ export default function MortgageCalculator() {
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               htmlFor="mortgage-term"
             >
-              Mortgage Term
+              Mortgage Term (Years)
             </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="mortgage-term"
-              type="number"
-              placeholder="30"
-            />
+            <div className="relative flex items-center">
+              <input
+                type="number"
+                placeholder="5.5"
+                className="pr-4 pl-14 py-3 text-sm text-black rounded bg-white border border-gray-400 w-full outline-[#333]"
+              />
+
+              <div className="absolute left-4 ">
+                <ClockIcon className="h-6 w-6 text-gray-600" />
+              </div>
+            </div>
             {/* <p className="text-red-500 text-xs italic">
               Please fill out this field.
             </p> */}
@@ -51,25 +66,41 @@ export default function MortgageCalculator() {
             >
               Interest Rate
             </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="interest-rate"
-              type="number"
-              placeholder="5"
-            />
+            <div className="relative flex items-center">
+              <input
+                type="number"
+                placeholder="5.5"
+                className="pr-4 pl-14 py-3 text-sm text-black rounded bg-white border border-gray-400 w-full outline-[#333]"
+              />
+
+              <div className="absolute left-4">
+                <PercentBadgeIcon className="h-6 w-6 text-gray-600" />
+              </div>
+            </div>
           </div>
 
           <div className="w-full md:w-1/2 px-3">
-            <label className="flex border-gray-700 bg-gray-100 text-gray-700 rounded-md px-3 py-3 my-3  hover:bg-indigo-300 cursor-pointer ">
-              <input className="my-3" type="radio" name="Repayment" />
-              <i className="p-2">Repayment</i>
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
+              htmlFor="mortgage-amount"
+            >
+              <input className="my-3 " type="radio" name="Repayment" />
+              <i className="p-4">Repayment</i>
             </label>
 
-            <label className="flex border-gray-700 bg-gray-100 text-gray-700 rounded-md px-3 py-3 my-3  hover:bg-indigo-300 cursor-pointer ">
+            <label
+              className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
+              htmlFor="mortgage-amount"
+            >
               <input className="my-3" type="radio" name="Interest" />
-              <i className="p-2">Interest Only</i>
+              <i className="p-4">Interest Only</i>
             </label>
           </div>
+        </div>
+        <div className="flex flex-wrap -mx-3 mb-6">
+          <button className="mx-12 w-full mt-1 rounded-lg bg-gray-700 p-2 text-white">
+            Calculate
+          </button>
         </div>
       </form>
       <button
