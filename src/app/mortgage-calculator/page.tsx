@@ -7,6 +7,7 @@ import {
   CurrencyDollarIcon,
   ClockIcon,
   PercentBadgeIcon,
+  CalculatorIcon,
 } from "@heroicons/react/24/solid";
 export default function MortgageCalculator() {
   const [rating, setRating] = useState(0);
@@ -79,12 +80,12 @@ export default function MortgageCalculator() {
             </div>
           </div>
 
-          <div className="w-full md:w-1/2 px-3">
+          <div className="w-full md:w-1/2 px-3 my-4">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
               htmlFor="mortgage-amount"
             >
-              <input className="my-3 " type="radio" name="Repayment" />
+              <input className="my-4 " type="radio" name="Repayment" />
               <i className="p-4">Repayment</i>
             </label>
 
@@ -92,14 +93,15 @@ export default function MortgageCalculator() {
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
               htmlFor="mortgage-amount"
             >
-              <input className="my-3" type="radio" name="Interest" />
+              <input className="my-4" type="radio" name="Interest" />
               <i className="p-4">Interest Only</i>
             </label>
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
-          <button className="mx-12 w-full mt-1 rounded-lg bg-gray-700 p-2 text-white">
-            Calculate
+          <button className="mx-16 justify-center w-full bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-lg inline-flex items-center">
+            <CalculatorIcon className="fill-current w-4 h-4 mr-2" />
+            <span>Calculate Repayments</span>
           </button>
         </div>
       </form>
