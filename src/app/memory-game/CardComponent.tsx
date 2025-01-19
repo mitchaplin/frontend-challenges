@@ -99,7 +99,7 @@ export const CardComponent = ({
             lockedNames.includes(name)
               ? "cursor-default bg-gray-500"
               : "bg-gray-800"
-          } rounded-lg border-gray-700 bg-gray-800 p-4 text-white`}
+          } rounded-lg border-gray-700 p-4 text-white`}
         >
           {img}
         </div>
