@@ -121,7 +121,7 @@ export default function MortgageCalculator() {
         onClick={() => {
           router.push("/");
         }}
-        className="mt-36 rounded-lg bg-gray-700 p-2 text-white"
+        className="mt-36 rounded-lg bg-slate-100 p-2 text-gray-700"
       >
         Go Back
       </button>
