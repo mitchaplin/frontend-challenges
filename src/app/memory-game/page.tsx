@@ -139,7 +139,7 @@ export default function MemoryGame() {
             id="sizes"
             className="block w-full rounded-lg border-gray-600 bg-gray-700 p-2.5 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 dark:focus:ring-blue-500"
           >
-            <option value={0} selected>
+            <option value={0} defaultValue={0}>
               Select Game Size
             </option>
             <option value={2}>2x2</option>
