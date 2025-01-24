@@ -58,6 +58,9 @@ export default function MortgageCalculator() {
 
   return (
     <main className={styles.main}>
+      <div className="text-3xl text-slate-100 mb-24 font-extrabold">
+        Mortgage Calculator
+      </div>
       <div className="grid grid-cols-2">
         <form className="w-full max-w-lg bg-slate-100 rounded-l-xl p-4">
           <div className="flex flex-wrap -mx-3 mb-6">
