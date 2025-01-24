@@ -10,6 +10,10 @@ import {
   CalculatorIcon,
 } from "@heroicons/react/24/solid";
 
+const defaultPrincipal = 300000;
+const defaultInterestRate = 5.5;
+const defaultTermYears = 30;
+
 const calculateMortgage = (
   principal: number,
   annualInterestRate: number,
@@ -33,9 +37,9 @@ const calculateMortgage = (
 };
 
 export default function MortgageCalculator() {
-  const [principal, setPrincipal] = useState<number | "">(300000);
-  const [interestRate, setInterestRate] = useState<number | "">(5.5);
-  const [termYears, setTermYears] = useState<number | "">(30);
+  const [principal, setPrincipal] = useState<number>(defaultPrincipal);
+  const [interestRate, setInterestRate] = useState<number>(defaultInterestRate);
+  const [termYears, setTermYears] = useState<number>(defaultTermYears);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [results, setResults] = useState<{
     monthlyPayment: string;
@@ -67,9 +71,15 @@ export default function MortgageCalculator() {
               <div className="relative flex items-center">
                 <input
                   type="number"
-                  value={principal}
-                  onChange={(e) => setPrincipal(e.target.valueAsNumber)}
-                  placeholder="300000"
+                  value={principal || undefined}
+                  onChange={(e) =>
+                    setPrincipal(
+                      isNaN(e.target.valueAsNumber)
+                        ? defaultPrincipal
+                        : e.target.valueAsNumber
+                    )
+                  }
+                  placeholder={`${defaultPrincipal}`}
                   className="pr-4 pl-14 py-3 text-sm text-black rounded bg-white border border-gray-400 w-full outline-[#333]"
                 />
 
@@ -91,8 +101,14 @@ export default function MortgageCalculator() {
                 <input
                   type="number"
                   value={termYears}
-                  onChange={(e) => setTermYears(e.target.valueAsNumber)}
-                  placeholder="30"
+                  onChange={(e) =>
+                    setTermYears(
+                      isNaN(e.target.valueAsNumber)
+                        ? defaultTermYears
+                        : e.target.valueAsNumber
+                    )
+                  }
+                  placeholder={`${defaultTermYears}`}
                   className="pr-4 pl-14 py-3 text-sm text-black rounded bg-white border border-gray-400 w-full outline-[#333]"
                 />
                 <div className="absolute left-4 ">
@@ -116,10 +132,12 @@ export default function MortgageCalculator() {
                   value={interestRate}
                   onChange={(e) =>
                     setInterestRate(
-                      isNaN(e.target.valueAsNumber) ? 0 : e.target.valueAsNumber
+                      isNaN(e.target.valueAsNumber)
+                        ? defaultInterestRate
+                        : e.target.valueAsNumber
                     )
                   }
-                  placeholder="5.5"
+                  placeholder={`${defaultInterestRate}`}
                   className="pr-4 pl-14 py-3 text-sm text-black rounded bg-white border border-gray-400 w-full outline-[#333]"
                 />
 
@@ -134,8 +152,8 @@ export default function MortgageCalculator() {
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
                 htmlFor="mortgage-amount"
               >
-                <input className="my-4 " type="radio" name="Repayment" />
-                <i className="p-4">Repayment</i>
+                <input className="my-4" type="radio" name="Repayment" />
+                <i className="p-4">Monthly Mortgage</i>
               </label>
 
               <label
@@ -143,7 +161,7 @@ export default function MortgageCalculator() {
                 htmlFor="mortgage-amount"
               >
                 <input className="my-4" type="radio" name="Interest" />
-                <i className="p-4">Interest Only</i>
+                <i className="p-4">Total Interest Paid</i>
               </label>
             </div>
           </div>
