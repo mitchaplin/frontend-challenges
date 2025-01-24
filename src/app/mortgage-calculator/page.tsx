@@ -186,8 +186,8 @@ export default function MortgageCalculator() {
               alt="empty-state-img"
             ></Image>
           ) : (
-            <span className="justify-around">
-              <div className="pb-12 flex justify-center text-xl text-slate-100">
+            <span className="justify-around calcResult">
+              <div className="calcResult pb-12 pt-6 flex justify-center text-xl text-slate-100">
                 Your Results
               </div>
               <div className="p-8 flex justify-center max-w-lg text-lg text-slate-100">
