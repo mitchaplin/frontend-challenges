@@ -193,7 +193,7 @@ export default function MortgageCalculator() {
               <div className="p-8 flex justify-center max-w-lg text-lg text-slate-100">
                 Your results are shown below based on the information you
                 provided. To adjust the results, edit the form and click
-                "calculate repayment" again.
+                &quot;calculate repayment&quot; again.
               </div>
               {results && (
                 <div className="">
