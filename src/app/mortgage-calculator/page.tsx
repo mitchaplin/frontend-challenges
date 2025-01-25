@@ -40,6 +40,9 @@ export default function MortgageCalculator() {
   const [principal, setPrincipal] = useState<number>(defaultPrincipal);
   const [interestRate, setInterestRate] = useState<number>(defaultInterestRate);
   const [termYears, setTermYears] = useState<number>(defaultTermYears);
+  const [calcType, setCalcType] = useState<"monthly" | "totalInterestPaid">(
+    "monthly"
+  );
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [results, setResults] = useState<{
     monthlyPayment: string;
@@ -155,7 +158,13 @@ export default function MortgageCalculator() {
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
                 htmlFor="mortgage-amount"
               >
-                <input className="my-4" type="radio" name="Repayment" />
+                <input
+                  className="my-4"
+                  value={calcType}
+                  type="radio"
+                  name="calcType"
+                  onChange={(e) => setCalcType("monthly")}
+                />
                 <i className="p-4">Monthly Mortgage</i>
               </label>
 
@@ -163,7 +172,13 @@ export default function MortgageCalculator() {
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2"
                 htmlFor="mortgage-amount"
               >
-                <input className="my-4" type="radio" name="Interest" />
+                <input
+                  className="my-4"
+                  value={calcType}
+                  type="radio"
+                  name="calcType"
+                  onChange={(e) => setCalcType("totalInterestPaid")}
+                />
                 <i className="p-4">Total Interest Paid</i>
               </label>
             </div>
@@ -189,8 +204,8 @@ export default function MortgageCalculator() {
               alt="empty-state-img"
             ></Image>
           ) : (
-            <span className="justify-around calcResult">
-              <div className="calcResult pb-12 pt-6 flex justify-center text-xl text-slate-100">
+            <span className="flex flex-col items-center">
+              <div className="pb-12 pt-6 flex justify-center text-xl text-slate-100">
                 Your Results
               </div>
               <div className="p-8 flex justify-center max-w-lg text-lg text-slate-100">
@@ -199,12 +214,24 @@ export default function MortgageCalculator() {
                 &quot;calculate repayment&quot; again.
               </div>
               {results && (
-                <div className="">
-                  <div className="p-8 flex justify-center max-w-lg text-lg text-slate-100">
-                    Monthly Payment: ${results.monthlyPayment}
-                  </div>
-                  <div className="p-8 flex justify-center max-w-lg text-lg text-slate-100">
-                    Total Interest Paid: ${results.totalInterestPaid}
+                <div className="calcResult flex items-center p-4 max-w-sm">
+                  <div className="relative cursor-pointer dark:text-white">
+                    <span className="absolute top-0 left-0 w-full h-full mt-1 ml-1 bg-indigo-500 rounded-lg dark:bg-gray-200"></span>
+                    <div className="relative p-6 bg-white dark:bg-gray-800 border-2 border-indigo-500 dark:border-gray-300 rounded-lg hover:scale-105 transition duration-500">
+                      <div className="flex items-center">
+                        <CurrencyDollarIcon className="h-6 w-6 text-gray-200" />
+                        <h3 className="my-2 ml-3 text-lg font-bold text-gray-800 dark:text-white">
+                          {calcType === "monthly"
+                            ? "Monthly Payment"
+                            : "Total Interest Paid"}
+                        </h3>
+                      </div>
+                      <p className="text-gray-600 dark:text-gray-300">
+                        {calcType === "monthly"
+                          ? `Monthly Payment: ${results.monthlyPayment}`
+                          : `Total Interest Paid: ${results.totalInterestPaid}`}
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
