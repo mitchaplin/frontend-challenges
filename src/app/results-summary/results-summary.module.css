@@ -1,0 +1,32 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #867a7aae;
+  height: 100vh;
+  width: 100vw;
+  overflow: scroll;
+}
+.card {
+  background: #5d6b83;
+  width: 24rem;
+  min-height: 24rem;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.calcbg {
+  background: rgb(1, 29, 29);
+}
+
+@keyframes projScale {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}

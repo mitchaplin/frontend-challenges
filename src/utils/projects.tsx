@@ -32,8 +32,15 @@ export const projects: Project[] = [
     name: "Mortgage Calculator",
     difficulty: "Intermediate",
     tags: ["React", "Tailwind", "TypeScript", "Next"],
-    completed: "Jan 14, 2025",
+    completed: "Jan 22, 2025",
     link: "./mortgage-calculator",
+  },
+  {
+    name: "Results Summary",
+    difficulty: "Newbie",
+    tags: ["React", "Tailwind", "TypeScript", "Next"],
+    completed: "Jan 28, 2025",
+    link: "./newbie-calculator",
   },
 ];
 
