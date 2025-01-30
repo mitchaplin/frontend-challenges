@@ -40,7 +40,7 @@ export const projects: Project[] = [
     difficulty: "Newbie",
     tags: ["React", "Tailwind", "TypeScript", "Next"],
     completed: "Jan 28, 2025",
-    link: "./newbie-calculator",
+    link: "./results-summary",
   },
 ];
 
